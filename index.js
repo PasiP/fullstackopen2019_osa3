@@ -3,10 +3,13 @@ const app = express()
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+app.use(express.static('build'))
 
 app.use(cors())
 app.use(bodyParser.json())
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+morgan.token('person', (request, response) => { return JSON.stringify(request.body) })
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :person'))
+
 
 let persons = [
   {
@@ -26,14 +29,18 @@ let persons = [
   },
   {
     name: "Mary Poppendick",
-    number: "39-23-*6423122",
+    number: "39-23-96423122",
     id: 4
   }
 ]
 
 const date = new Date()
 
-app.get('/persons/:id', (request, response) => {
+app.get('/api/persons', (request, response) => {
+  response.json(persons)
+})
+
+app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   const person = persons.find(person => person.id === id)
 
@@ -44,7 +51,7 @@ app.get('/persons/:id', (request, response) => {
   }
 })
 
-app.delete('/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   persons = persons.filter(person => person.id !== id)
 
@@ -83,8 +90,8 @@ app.post('/api/persons', (request, response) => {
   }
 
   response.json(person)
-  morgan.token('body', function (request, response) { return JSON.stringify(body) })
 })
+
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
