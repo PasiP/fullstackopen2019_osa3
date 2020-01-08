@@ -1,1 +1,1 @@
-https://dashboard.heroku.com/apps/intense-spire-80857
+https://intense-spire-80857.herokuapp.com/
