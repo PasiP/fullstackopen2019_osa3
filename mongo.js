@@ -9,17 +9,17 @@ const Person = mongoose.model('Person', personSchema)
 const password = process.argv[2]
 const url =
   `mongodb+srv://fullstack:${password}@cluster0-sca9s.mongodb.net/person-app?retryWrites=true`
-  mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
 if (process.argv.length<3){
   console.log('give password as argument')
   process.exit(1)
 }
 else if ( process.argv.length<4 ) {
-  console.log("Phonebook:")
+  console.log('Phonebook:')
   Person.find({}).then(result => {
     result.forEach(person => {
-      console.log(person.name," ",person.number )
+      console.log(person.name,' ',person.number )
     })
     mongoose.connection.close()
   })
@@ -31,7 +31,7 @@ else if ( process.argv.length<4 ) {
   })
 
   person.save().then(response => {
-    console.log('added', person.name," ",person.number ,' to phonebook');
-    mongoose.connection.close();
-})
+    console.log('added', person.name,' ',person.number ,' to phonebook')
+    mongoose.connection.close()
+  })
 }
